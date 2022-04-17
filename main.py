@@ -17,4 +17,4 @@ def insert_data(data: List[Dict]):
 
 
 if __name__ == "__main__":
-    insert_data(get_fake_data())
+    insert_data(get_fake_data(length=200))
