@@ -1,3 +1,4 @@
+# pylint: disable=broad-except
 """librería para hacer los insert genericos"""
 
 from typing import Dict, List
@@ -20,6 +21,11 @@ class ScriptTemplate:
 
         if not data:
             return cls.SQL_QUERY
+
+        # si algun campo es string, le agrego comillas
+        for key in data.keys():
+            if isinstance(data[key], str):
+                data[key] = f"'{data[key]}'"
 
         fields = ",".join(field for field in data.keys())
         values = ",".join(data[field] for field in data.keys())
@@ -77,9 +83,14 @@ class ScriptTemplate:
             raise Exception("No hay query SQL")
 
         for elem in data:
-            query = cls.get_sql_query(elem)
+            try:
+                query = cls.get_sql_query(elem)
 
-            cls.query(query)
+                cls.query(query)
+
+            except Exception as ex:
+                print(ex)
+                continue
 
     @classmethod
     def insert_person_generic(cls, person: Dict):
