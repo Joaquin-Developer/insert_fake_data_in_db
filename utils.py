@@ -7,6 +7,10 @@ import pymysql
 import db_config
 
 
+class NoHayQueryException(Exception):
+    """Tipo de exception para cuando no hay query sql"""
+
+
 class ScriptTemplate:
     """class for generic Scripts"""
     SQL_QUERY = None
@@ -17,7 +21,7 @@ class ScriptTemplate:
     def get_sql_query(cls, data: Dict = None) -> str:
         """string con la query a ejecutar"""
         if not cls.SQL_QUERY:
-            raise Exception("No hay SQL query.")
+            raise NoHayQueryException("No hay SQL query.")
 
         if not data:
             return cls.SQL_QUERY
